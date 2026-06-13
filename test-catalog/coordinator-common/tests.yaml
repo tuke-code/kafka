@@ -1,3 +1,5 @@
+org.apache.kafka.coordinator.common.runtime.CoordinatorBackgroundThreadPoolExecutorTest:
+- testMetrics
 org.apache.kafka.coordinator.common.runtime.CoordinatorExecutorImplTest:
 - testCancelAllTasks
 - testTaskCancelledAfterBeingExecutedButBeforeWriteOperationIsExecuted
@@ -29,12 +31,14 @@ org.apache.kafka.coordinator.common.runtime.CoordinatorResultTest:
 - testEquals
 - testRecordsCannotBeNull
 org.apache.kafka.coordinator.common.runtime.CoordinatorRuntimeMetricsImplTest:
+- testBackgroundThreadIdleSensor
 - testBatchBufferCacheDiscardCount
 - testBatchBufferCacheSize
 - testEventQueueSize
 - testFlushRateSensor
 - testHistogramMetrics
-- testMetricNames
+- testMetricNamesWithBackgroundMetrics
+- testMetricNamesWithoutBackgroundMetrics
 - testMetricsGroupIsolation
 - testPartitionLoadSensorMetrics
 - testRecordEventPurgatoryTimeLimit
@@ -79,16 +83,20 @@ org.apache.kafka.coordinator.common.runtime.CoordinatorRuntimeTest:
 - testScheduleNonAtomicWriteOperationWhenWriteFails
 - testScheduleNonAtomicWriteOperationWithRecordTooLarge
 - testScheduleReadAllOp
+- testScheduleReadAllOpWhenClosed
 - testScheduleReadOp
+- testScheduleReadOpWhenClosed
 - testScheduleReadOpWhenOpsFails
 - testScheduleReadOpWhenPartitionInactive
 - testScheduleTimer
 - testScheduleTransactionCompletion
+- testScheduleTransactionCompletionWhenClosed
 - testScheduleTransactionCompletionWhenEpochValidationFails
 - testScheduleTransactionCompletionWhenReplayFails
 - testScheduleTransactionCompletionWhenWriteFails
 - testScheduleTransactionCompletionWhenWriteTimesOut
 - testScheduleTransactionalWriteOp
+- testScheduleTransactionalWriteOpWhenClosed
 - testScheduleTransactionalWriteOpWhenVerificationFails
 - testScheduleTransactionalWriteOperationWithBatching
 - testScheduleUnloading
@@ -97,8 +105,10 @@ org.apache.kafka.coordinator.common.runtime.CoordinatorRuntimeTest:
 - testScheduleUnloadingWithEmptyEpoch
 - testScheduleUnloadingWithException
 - testScheduleUnloadingWithStalePartitionEpoch
+- testScheduleWriteAllOpWhenClosed
 - testScheduleWriteAllOperation
 - testScheduleWriteOp
+- testScheduleWriteOpWhenClosed
 - testScheduleWriteOpWhenInactive
 - testScheduleWriteOpWhenOpFails
 - testScheduleWriteOpWhenReplayFails
