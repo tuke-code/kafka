@@ -87,6 +87,18 @@ org.apache.kafka.server.AssignmentsManagerTest:
 - testStartAndShutdown
 - testSuccessfulAssignment
 - testUnSuccessfulRequestCausesRetransmission
+org.apache.kafka.server.AuthHelperTest:
+- testAuthorize
+- testComputeDescribeClusterResponseSuccess
+- testComputeDescribeClusterResponseV0WithUnexpectedEndpointType
+- testComputeDescribeClusterResponseV0WithUnknownEndpointType
+- testComputeDescribeClusterResponseV1WithUnexpectedEndpointType
+- testComputeDescribeClusterResponseV1WithUnknownEndpointType
+- testComputeDescribeClusterResponseWhereControllerIsNotFound
+- testFilterByAuthorized
+- testFilterByAuthorizedIsResilientToMismatchedAuthorizeResults
+- testPartitionByAuthorized
+- testPartitionByAuthorizedWithoutAuthorizer
 org.apache.kafka.server.BootstrapControllersIntegrationTest:
 - testAcls
 - testAclsByControllers
@@ -498,6 +510,7 @@ org.apache.kafka.server.share.CachedSharePartitionTest:
 org.apache.kafka.server.share.dlq.ShareGroupDLQStateManagerTest:
 - testCoalesceProduceRequestsKeepsDifferentDlqTopicsSeparate
 - testCoalesceProduceRequestsMergesPartitionsForSameDlqTopic
+- testCoalesceProduceRequestsMergesRecordsForSameDlqPartition
 - testCoalesceProduceRequestsSkipsHandlerWhoseTopicProduceDataThrows
 - testCoalesceProduceRequestsWithEmptyHandlerListProducesEmptyRequest
 - testCoalesceProduceRequestsWithSingleHandlerProducesOneTopicOnePartition
@@ -511,6 +524,8 @@ org.apache.kafka.server.share.dlq.ShareGroupDLQStateManagerTest:
 - testDLQRecordCopyEnabledWithErrorOnLogRead
 - testDLQRecordCopyEnabledWithMultipleLogReaderIterations
 - testDLQRecordCopyEnabledWithPartialLogReaderRecords
+- testDlqAfterStopFailsWithIllegalState
+- testDlqBeforeStartFailsWithIllegalState
 - testDlqCreateTopicFatalErrorFailsFuture
 - testDlqCreateTopicNoClusterNodesFailsFuture
 - testDlqCreateTopicPartialFailuresThenSucceeds
@@ -532,7 +547,7 @@ org.apache.kafka.server.share.dlq.ShareGroupDLQStateManagerTest:
 - testDlqTopicPrefixMismatchFailsValidation
 - testDlqTopicStartingWithUnderscoreFailsValidation
 - testDlqTwoEnqueuedRecordsBothComplete
-- testDlqValidationFailureCompletesFutureBeforeStart
+- testDlqValidationFailureCompletesFutureSynchronously
 - testMultipleAccumulatedHandlersInNodeRPCMap
 - testStartIsIdempotent
 - testStopWithoutStartIsNoOp
