@@ -3206,6 +3206,7 @@ org.apache.kafka.clients.producer.internals.ProducerMetadataTest:
 - testMetadataUpdateWaitTime
 - testMetadataWaitAbortedOnFatalException
 - testRequestUpdateForTopic
+- testRetainTopic
 - testTimeToNextUpdateOverwriteBackoff
 - testTopicExpiry
 org.apache.kafka.clients.producer.internals.RecordAccumulatorTest:
@@ -5402,7 +5403,9 @@ org.apache.kafka.common.security.ssl.Tls13SslFactoryTest:
 - testUntrustedKeyStoreValidationFails
 - testUsedConfigs
 org.apache.kafka.common.serialization.ListDeserializerTest:
+- shouldDeserializeListEndingInEmptyEntry
 - shouldPassHeadersToUnderlyingDeserializer
+- shouldThrowOnEntryTruncatedMidStream
 - shouldThrowOnNegativeEntrySize
 - shouldThrowOnNegativeLength
 - shouldThrowOnNegativeNullEntryLength
