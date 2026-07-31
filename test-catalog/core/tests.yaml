@@ -948,11 +948,6 @@ kafka.network.DynamicConnectionQuotaTest:
 - testDynamicListenerConnectionQuota
 kafka.network.DynamicNumNetworkThreadsTest:
 - testDynamicNumNetworkThreads
-kafka.network.ProcessorTest:
-- testParseRequestHeaderForProduceV0ToV2
-- testParseRequestHeaderWithDisabledApiVersion
-- testParseRequestHeaderWithUnsupportedApi
-- testParseRequestHeaderWithUnsupportedApiVersion
 kafka.network.RequestConvertToJsonTest:
 - testRequestDesc
 - testRequestDescMetrics
@@ -2213,6 +2208,9 @@ kafka.server.StreamsGroupDescribeRequestTest:
 - testStreamsGroupDescribeWhenFeatureFlagNotEnabled
 kafka.server.StreamsGroupHeartbeatRequestTest:
 - testAlterRackAwareAssignmentTagsGroupConfig
+- testAlterStreamsAssignorNameGroupConfig
+- testAlterStreamsAssignorNameGroupConfigWithCustomAssignor
+- testDescribeStreamsAssignorNameGroupConfigFallsBackToAssignorName
 - testDynamicGroupConfig
 - testEmptyStreamsGroupId
 - testFencedMemberCanRejoinWithEpochZero
@@ -2229,6 +2227,9 @@ kafka.server.StreamsGroupHeartbeatRequestTest:
 - testStreamsGroupHeartbeatWithInvalidAPIVersion
 kafka.server.StreamsGroupHeartbeatRequestTest$WithAssignmentBatchingDisabledTest:
 - testAlterRackAwareAssignmentTagsGroupConfig
+- testAlterStreamsAssignorNameGroupConfig
+- testAlterStreamsAssignorNameGroupConfigWithCustomAssignor
+- testDescribeStreamsAssignorNameGroupConfigFallsBackToAssignorName
 - testDynamicGroupConfig
 - testEmptyStreamsGroupId
 - testFencedMemberCanRejoinWithEpochZero
@@ -2321,13 +2322,6 @@ kafka.server.epoch.OffsetsForLeaderEpochTest:
 kafka.server.handlers.DescribeTopicPartitionsRequestHandlerTest:
 - testDescribeTopicPartitionsRequest
 - testDescribeTopicPartitionsRequestWithEdgeCases
-kafka.server.logger.RuntimeLoggerManagerTest:
-- testOperationNotAllowed
-- testValidateBogusLogLevelNameNotAllowed
-- testValidateDeleteLogLevelConfig
-- testValidateRemoveRootLogLevelConfigNotAllowed
-- testValidateSetLogLevelConfig
-- testValidateSetRootLogLevelConfig
 kafka.server.metadata.BrokerMetadataPublisherTest:
 - testExceptionInUpdateCoordinator
 - testGetTopicDelta

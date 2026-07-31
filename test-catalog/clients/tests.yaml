@@ -116,6 +116,9 @@ org.apache.kafka.clients.NetworkClientTest:
 - testDisconnectDuringUserMetadataRequest
 - testDisconnectWithMultipleInFlights
 - testDnsLookupFailure
+- testEnsureBootstrappedPollTimeoutReturnsWithoutError
+- testEnsureBootstrappedRetryUntilSuccess
+- testEnsureBootstrappedSuccess
 - testFailedConnectionToFirstAddress
 - testFailedConnectionToFirstAddressAfterReconnect
 - testHasNodeAvailableOrConnectionReady
@@ -184,6 +187,7 @@ org.apache.kafka.clients.admin.KafkaAdminClientTest:
 - testAbortTransaction
 - testAbortTransactionFindLeaderAfterDisconnect
 - testAddRaftVoterRequest
+- testAdminBootstrapResolutionExceptionPropagated
 - testAdminClientApisAuthenticationFailure
 - testAdminClientFailureWhenClosed
 - testAlterClientQuotas
@@ -544,10 +548,6 @@ org.apache.kafka.clients.admin.internals.AdminApiDriverTest:
 - testRetryLookupAndDisableBatchAfterNoBatchedFindCoordinatorsException
 - testRetryLookupIsNoOpForFixedBrokerStrategy
 - testStaticMapping
-org.apache.kafka.clients.admin.internals.AdminBootstrapAddressesTest:
-- testFromConfig
-- testNoBootstrapSet
-- testTwoBootstrapsSet
 org.apache.kafka.clients.admin.internals.AdminFetchMetricsManagerTest:
 - testMultiNodeLatency
 - testSingleNodeLatency
@@ -869,6 +869,7 @@ org.apache.kafka.clients.consumer.KafkaConsumerTest:
 - testConstructorClose
 - testConstructorFailsOnNetworkClientConstructorFailure
 - testConstructorInvalidMetricReporters
+- testConsumerBootstrapResolutionExceptionPropagatedToPoll
 - testConsumerJmxPrefix
 - testConsumerProtocolDoesNotLogRecommendation
 - testCurrentLag
@@ -984,6 +985,7 @@ org.apache.kafka.clients.consumer.KafkaShareConsumerMetricsTest:
 - testUnregisteringCustomMetricsWithSameNameDoesntAffectConsumerMetrics
 - testUnregisteringNonexistingMetricsDoesntCauseError
 org.apache.kafka.clients.consumer.KafkaShareConsumerTest:
+- testShareConsumerBootstrapResolutionExceptionPropagatedToPoll
 - testVerifyFetchAndCloseImplicit
 - testVerifyFetchAndCommitSyncImplicit
 - testVerifyHeartbeats
@@ -1206,6 +1208,7 @@ org.apache.kafka.clients.consumer.internals.AsyncKafkaConsumerTest:
 - testBeginningOffsetsTimeoutException
 - testBeginningOffsetsTimeoutOnEventProcessingTimeout
 - testBeginningOffsetsWithZeroTimeout
+- testBufferedRecordsReturnedWithoutResubmittingPollEvent
 - testClearWakeupTriggerAfterPoll
 - testCloseAwaitPendingAsyncCommitComplete
 - testCloseAwaitPendingAsyncCommitIncomplete
@@ -1247,6 +1250,7 @@ org.apache.kafka.clients.consumer.internals.AsyncKafkaConsumerTest:
 - testGroupRemoteAssignorInClassicProtocol
 - testGroupRemoteAssignorUnusedIfGroupIdUndefined
 - testGroupRemoteAssignorUsedInConsumerProtocol
+- testInflightPollResubmittedAfterCompletionWithEmptyBuffer
 - testInterceptorAutoCommitOnClose
 - testInterceptorCommitAsync
 - testInterceptorCommitSync
@@ -1265,6 +1269,7 @@ org.apache.kafka.clients.consumer.internals.AsyncKafkaConsumerTest:
 - testPauseFlagPreservedForRetainedPartitionAcrossRebalance
 - testPollDoesNotAddNewAsyncPollEventWhenOneIsAlreadyInFlight
 - testPollDoesNotWaitForReconciliationCheckIfNoPendingReconciliation
+- testPollSurfacesInflightPollErrorAndResumes
 - testPollThrowsInterruptExceptionIfInterrupted
 - testPollWaitsForReconciliationCheckComplete
 - testPollWithManualAssignmentDoesNotBusyLoop
@@ -1957,6 +1962,7 @@ org.apache.kafka.clients.consumer.internals.FetchRequestManagerTest:
 - testConsumingViaIncrementalFetchRequests
 - testCorruptMessageError
 - testEmptyControlBatch
+- testEmptyFetchResponseWakesUpBuffer
 - testEpochSetInFetchRequest
 - testFetchAfterPartitionWithFetchedRecordsIsUnassigned
 - testFetchCompletedBeforeHandlerAdded
@@ -2159,6 +2165,7 @@ org.apache.kafka.clients.consumer.internals.KafkaConsumerMetricsTest:
 - shouldRecordCommittedTime
 - shouldRemoveMetricsOnClose
 org.apache.kafka.clients.consumer.internals.NetworkClientDelegateTest:
+- testBootstrapResolutionExceptionPropagatedViaErrorEventOnce
 - testCheckDisconnectsWithOnClose
 - testEnsureCorrectCompletionTimeOnComplete
 - testEnsureCorrectCompletionTimeOnFailure
@@ -2312,11 +2319,13 @@ org.apache.kafka.clients.consumer.internals.ShareCompletedFetchTest:
 - testCrcFailureWithUnalignedAcquiredRecords
 - testGapsForControlRecordsInAcquiredRange
 - testGapsWithControlRecordsAtBeginningAndEnd
+- testHasPendingAcknowledgements
 - testMixedRecordsAndGaps
 - testMultipleConsecutiveCrcFailures
 - testNegativeFetchCount
 - testNoRecordsInFetch
 - testOverlappingAcquiredRecordsLogsErrorAndRetainsFirstOccurrence
+- testPendingRenewAcknowledgementsWithException
 - testRecordDeserializationException
 - testSimple
 - testSoftMaxPollRecordLimit
@@ -2333,13 +2342,17 @@ org.apache.kafka.clients.consumer.internals.ShareConsumeRequestManagerTest:
 - testCallbackHandlerConfig
 - testCloseFutureCompletedWhenMemberIdIsNull
 - testCloseInternalClosesShareFetchMetricsManager
+- testCloseSessionWhenNoSharePartitions
 - testCloseShouldBeIdempotent
 - testCloseWithSubscriptionChange
 - testCommitAsync
 - testCommitAsyncWithSubscriptionChange
 - testCommitSync
 - testCommitSyncWithSubscriptionChange
+- testCommitWithRenewAcknowledgements
 - testCorruptMessageError
+- testDoesNotCloseSessionWhileAcknowledgementsPending
+- testDoesNotCloseSessionWhileRecordsBuffered
 - testFatalErrorsAcknowledgementResponse
 - testFetchDisconnected
 - testFetchError
@@ -2385,12 +2398,13 @@ org.apache.kafka.clients.consumer.internals.ShareConsumeRequestManagerTest:
 - testShareFetchWithSubscriptionChangeMultipleNodes
 - testShareFetchWithSubscriptionChangeMultipleNodesEmptyAcknowledgements
 - testStaleLeaderEpochDoesNotDowngradeShareSessionLeader
+- testStaleMetadataLeadershipChangeDoesNotFailAcknowledgements
 - testUnauthorizedTopic
 - testUnknownTopicIdError
-- testWhenFetchResponseReturnsWithALeadershipChangeErrorAndNewLeaderInformation
 - testWhenLeadershipChangeBetweenShareFetchRequests
 - testWhenLeadershipChangedAfterDisconnected
 - testWhenShareFetchResponseReturnsALeadershipChangeErrorButNoNewLeaderInformation
+- testWhenShareFetchResponseReturnsWithALeadershipChangeErrorAndNewLeaderInformation
 org.apache.kafka.clients.consumer.internals.ShareConsumerImplTest:
 - testAcknowledgementCommitCallbackRegistrationEvent
 - testAcknowledgementCommitCallbackRegistrationEvent_Null
@@ -2433,8 +2447,12 @@ org.apache.kafka.clients.consumer.internals.ShareConsumerImplTest:
 - testWakeupBeforeCallingPoll
 org.apache.kafka.clients.consumer.internals.ShareFetchBufferTest:
 - testBasicPeekAndPoll
+- testBufferedIncludesConsumedFetchWithPendingAcknowledgements
 - testBufferedPartitions
 - testCloseClearsData
+- testCloseClearsPendingAcknowledgementFetches
+- testRetainsEvictedFetchWithPendingAcknowledgements
+- testRetainsEvictedFetchWithPendingRenewAcknowledgements
 - testWakeup
 org.apache.kafka.clients.consumer.internals.ShareFetchCollectorTest:
 - testErrorInInitialize
@@ -2536,6 +2554,7 @@ org.apache.kafka.clients.consumer.internals.ShareSessionHandlerTest:
 - testAcknowledgeOnlyPartitionNotInSessionIsForgotten
 - testAddNewIdAfterTopicRemovedFromSession
 - testCanSkipIfRequestEmpty
+- testCloseEmptySessionBuildsFinalEpochShareFetch
 - testForgottenPartitions
 - testNextAcknowledgementsClearedOnInvalidRequest
 - testPartitionForgottenOnAcknowledgeOnly
@@ -3037,7 +3056,9 @@ org.apache.kafka.clients.producer.KafkaProducerTest:
 - testPartitionsForWithNullTopic
 - testPrepareTransactionFailsWhen2PCDisabled
 - testPrepareTransactionSuccess
+- testProducerBootstrapResolutionExceptionPropagated
 - testProducerJmxPrefix
+- testProducerSendOffsetsToTransactionBootstrapResolutionExceptionPropagated
 - testRetriesAndIdempotenceForIdempotentProducers
 - testSendNotAllowedInPreparedTransactionState
 - testSendOffsetsNotAllowedInPreparedTransactionState
@@ -4900,6 +4921,7 @@ org.apache.kafka.common.security.authenticator.SaslAuthenticatorTest:
 - testMissingUsernameSaslPlain
 - testMultipleServerMechanisms
 - testPacketSizeTooBig
+- testPrincipalBuiltOncePerAuthentication
 - testReauthenticateWithLargeReauthValue
 - testRepeatedValidSaslPlainOverSsl
 - testSaslAuthenticationMaxReceiveSize
