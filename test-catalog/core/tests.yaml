@@ -281,6 +281,18 @@ kafka.api.GroupEndToEndAuthorizationTest:
 - testProduceConsumeWithPrefixedAcls
 - testProduceConsumeWithWildcardAcls
 - testTwoConsumersWithDifferentSaslCredentials
+kafka.api.IncrementalAllocationProducerSendTest:
+- testBatchSizeZero
+- testClose
+- testCloseWithZeroTimeoutFromCallerThread
+- testCloseWithZeroTimeoutFromSenderThread
+- testFlush
+- testSendBeforeAndAfterPartitionExpansion
+- testSendLargeRecordsSpanningMultipleChunks
+- testSendNonCompressedMessageWithCreateTime
+- testSendOffset
+- testSendToPartition
+- testSendToPartitionWithFollowerShutdownShouldNotTimeout
 kafka.api.MetricsTest:
 - testMetrics
 kafka.api.PlaintextAdminIntegrationTest:
@@ -1772,6 +1784,7 @@ kafka.server.KafkaConfigTest:
 - testAdvertiseDefaults
 - testAdvertisedListenersAllowedForKRaftControllerOnlyRole
 - testBadListenerProtocol
+- testBrokerIdDeprecationWarning
 - testBrokerIdIsInferredByNodeIdWithKraft
 - testCaseInsensitiveListenerProtocol
 - testConsumerGroupHeartbeatIntervalValidation
