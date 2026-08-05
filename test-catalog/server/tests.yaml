@@ -188,6 +188,7 @@ org.apache.kafka.server.CordonedLogDirsIntegrationTest:
 - testCordonUncordonLogDirs
 - testCordonUnknownLogDirs
 - testDecommissionBroker
+- testDecommissionLogDir
 - testFeatureNotEnabled
 - testFeatureNotEnabledStaticConfig
 - testStaticCordonUncordonLogDirs
@@ -318,6 +319,8 @@ org.apache.kafka.server.KRaftClusterTest:
 - testTimedOutHeartbeats
 - testTopicDeletedAndRecreatedWhileBrokerIsDown
 - testUnregisterBroker
+- testUnregisterController
+- testUnregisterControllerError
 - testUpdateMetadataVersion
 org.apache.kafka.server.KRaftTopicCreatorTest:
 - testAuthenticationException
