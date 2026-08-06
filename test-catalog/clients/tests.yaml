@@ -2614,6 +2614,7 @@ org.apache.kafka.clients.consumer.internals.StreamsGroupHeartbeatRequestManagerT
 - testNotSendingHeartbeatIfMemberIsJoiningOrAcknowledgingWhenHeartbeatInFlight
 - testNotSendingLeaveHeartbeatIfPollTimerExpiredAndMemberIsLeaving
 - testOtherErrorResponse
+- testPartitionsByUserEndpointMergedForDuplicateUserEndpoints
 - testPollOnCloseWhenIsLeaving
 - testPollOnCloseWhenIsNotLeaving
 - testPollOnCloseWhenStaticMemberIsLeaving
@@ -3906,6 +3907,10 @@ org.apache.kafka.common.internals.TopicTest:
 - testTopicHasCollision
 - testTopicHasCollisionChars
 - testUnifyCollisionChars
+org.apache.kafka.common.internals.UnsupportedProtocolFieldExceptionTest:
+- testFieldConstructorFormatsMessage
+- testIsUnsupportedVersionException
+- testMessageConstructorPassesMessageThrough
 org.apache.kafka.common.memory.GarbageCollectedMemoryPoolTest:
 - testAllocationBound
 - testAllocationNegative
