@@ -1902,6 +1902,7 @@ org.apache.kafka.streams.processor.internals.DefaultStreamPartitionerTest:
 - shouldReturnEmptyOptionalWhenSerializedKeyIsNull
 - shouldThrowUnsupportedOperationExceptionForDeprecatedMethod
 org.apache.kafka.streams.processor.internals.DefaultStreamsRebalanceListenerTest:
+- shouldDropStandbyAndWarmupForTaskThatIsAlsoAssignedAsActive
 - testOnAllTasksLost
 - testOnAllTasksLostRecordsMetrics
 - testOnAllTasksLostRecordsMetricsEvenWithException
@@ -2740,6 +2741,7 @@ org.apache.kafka.streams.processor.internals.StoreChangelogReaderTest:
 - logicalChangelogEndOffsetsShouldReturnNullWhenBothSourcesUnknown
 - shouldCallRecordRestoreTimeAtTheEndOfRestore
 - shouldCheckCompletionIfPositionLargerThanEndOffset
+- shouldDecrementRemainingRecordsToZeroWithOffsetGaps
 - shouldInitializeChangelogAndCheckForCompletion
 - shouldNotCallRecordRestoreTimeIfRestoreDoesNotComplete
 - shouldNotRegisterSameStoreMultipleTimes
@@ -2802,7 +2804,10 @@ org.apache.kafka.streams.processor.internals.StreamTaskTest:
 - shouldCommitOnCloseRestoringIfNoProgress
 - shouldCommitWhileUpdateSnapshotWithTheConsumedOffsetsForSuspendedRunningTask
 - shouldFailOnCommitIfTaskIsClosed
+- shouldFlushPendingTerminalE2ELatencyOnTaskFlush
 - shouldFlushStateManagerAndRecordCollector
+- shouldIncludeProcessingDelayInTerminalNodeE2ELatency
+- shouldIncludePunctuatorDelayInTerminalNodeE2ELatency
 - shouldInitTaskTimeoutAndEventuallyThrow
 - shouldLogNotReadyWhenStaleAfterThreshold
 - shouldMaybeReturnOffsetsForRepartitionTopicsForPurging
@@ -2831,6 +2836,8 @@ org.apache.kafka.streams.processor.internals.StreamTaskTest:
 - shouldReadCommittedOffsetAndRethrowTimeoutWhenCompleteRestoration
 - shouldReadCommittedStreamTimeAndMergeProcessorMetadataOnInitialize
 - shouldReadCommittedStreamTimeAndProcessorMetadataOnInitialize
+- shouldReconstructTerminalE2ELatencyForBatchOfTwoRecords
+- shouldReconstructTerminalE2ELatencyForBatchWithSkewedTimestamps
 - shouldRecordBufferedRecords
 - shouldRecordE2ELatencyOnSourceNodeAndTerminalNodes
 - shouldRecordProcessRatio
@@ -2925,6 +2932,7 @@ org.apache.kafka.streams.processor.internals.StreamThreadTest:
 - shouldProcessWhenPartitionAssigned
 - shouldProcessWhenRunning
 - shouldProcessWhenStarting
+- shouldPublishTaskOffsetSumSnapshotOnEveryIteration
 - shouldPunctuateActiveTask
 - shouldPunctuateWithTimestampPreservedInProcessorContext
 - shouldPurgeAfterPurgeInterval
@@ -3167,6 +3175,8 @@ org.apache.kafka.streams.processor.internals.TaskExecutionMetadataTest:
 - testNamedTopologiesCanBePausedIndependently
 - testNamedTopologiesCanBeStartedPaused
 org.apache.kafka.streams.processor.internals.TaskExecutorTest:
+- shouldFlushTerminalE2ELatencyAgainstTheBatchEndTime
+- shouldFlushTerminalE2ELatencyWhenProcessingThrows
 - testCommitWithOpenTransactionButNoOffsetsEOSV2
 - testPunctuateWithPause
 org.apache.kafka.streams.processor.internals.TaskManagerTest:
@@ -5628,6 +5638,7 @@ org.apache.kafka.streams.state.internals.PlainToHeadersWindowStoreAdapterTest:
 - shouldHandleWindowKeyQuerySuccessfully
 - shouldHandleWindowRangeQuerySuccessfully
 - shouldNotCollectExecutionInfoWhenNotRequested
+- shouldReportRetentionPeriodOfUnderlyingStore
 org.apache.kafka.streams.state.internals.PlainToHeadersWindowStoreIteratorAdapterTest:
 - shouldDelegateClose
 - shouldDelegatePeekNextKey
@@ -6919,6 +6930,7 @@ org.apache.kafka.streams.state.internals.SessionToHeadersStoreAdapterTest:
 - shouldFetchSessionAndStripHeaders
 - shouldPutNullValue
 - shouldPutWithEmptyHeaders
+- shouldReportRetentionPeriodOfUnderlyingStore
 - shouldReturnNullForNullFetchSession
 - shouldReturnNullFromRawAggregationValueForNull
 - shouldReturnPersistentTrue
@@ -7327,8 +7339,10 @@ org.apache.kafka.streams.state.internals.TimestampedToHeadersWindowStoreAdapterT
 - shouldHandleWindowKeyQuerySuccessfully
 - shouldHandleWindowRangeQuerySuccessfully
 - shouldNotCollectExecutionInfoWhenNotRequested
+- shouldReportRetentionPeriodOfUnderlyingStore
 org.apache.kafka.streams.state.internals.TimestampedWindowStoreBuilderTest:
 - shouldDisableCachingWithRetainDuplicates
+- shouldExposeRetentionPeriodThroughTimestampedAdapter
 - shouldHaveCachingAndChangeLoggingWhenBothEnabled
 - shouldHaveCachingStoreWhenEnabled
 - shouldHaveChangeLoggingStoreByDefault
@@ -7477,6 +7491,12 @@ org.apache.kafka.streams.state.internals.WindowStoreBuilderTest:
 - shouldThrowNullPointerIfTimeIsNull
 org.apache.kafka.streams.state.internals.WindowStoreFetchTest:
 - testStoreConfig
+org.apache.kafka.streams.state.internals.WithRetentionPeriodTest:
+- shouldNotConsultOuterLayersThatReportRetention
+- shouldResolveRetentionThroughWrappedStores
+- shouldReturnMinusOneWhenNoWrappedStoreReportsRetention
+- shouldReturnMinusOneWhenStoreDoesNotReportRetention
+- shouldReturnRetentionOfStoreThatReportsItDirectly
 org.apache.kafka.streams.state.internals.WrappingStoreProviderTest:
 - shouldDefaultToReadUncommittedWhenIsolationLevelNotSpecified
 - shouldFindKeyValueStores
