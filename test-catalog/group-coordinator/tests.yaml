@@ -397,6 +397,8 @@ org.apache.kafka.coordinator.group.GroupCoordinatorShardTest:
 - testStreamsGroupHeartbeat
 - testValidateStreamsGroupMemberDelegates
 org.apache.kafka.coordinator.group.GroupMetadataManagerTest:
+- testAlterShareGroupOffsetsBumpsGroupEpoch
+- testAlterShareGroupOffsetsErroneousCallDoesNotBumpGroupEpoch
 - testCanComputeNextTargetAssignment
 - testCanComputeNextTargetAssignmentWithNoPreviousAssignmentTimestamp
 - testCanComputeNextTargetAssignmentWithZeroAssignmentIntervalMs
@@ -1609,6 +1611,13 @@ org.apache.kafka.coordinator.group.streams.TopologyMetadataTest:
 - testMetadataImage
 - testSubtopologies
 - testTopology
+org.apache.kafka.coordinator.group.streams.assignor.AssignmentConfigsImplTest:
+- testDefault
+- testFromEmptyMap
+- testFromMap
+- testFromMapWithoutRackAwareAssignmentTags
+- testRackAwareAssignmentTagsAreUnmodifiable
+- testWithers
 org.apache.kafka.coordinator.group.streams.assignor.GroupSpecImplTest:
 - testConfigs
 - testMemberAssignmentState
