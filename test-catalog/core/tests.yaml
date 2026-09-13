@@ -328,8 +328,6 @@ kafka.api.PlaintextAdminIntegrationTest:
 - testDescribeClassicGroups
 - testDescribeConfigWithOptionTimeoutMs
 - testDescribeConfigsForLog4jLogLevels
-- testDescribeConfigsNonexistent
-- testDescribeConfigsNonexistentForKraft
 - testDescribeGroups
 - testDescribeProducers
 - testDescribeStreamsGroups
@@ -1015,6 +1013,7 @@ kafka.raft.RaftManagerTest:
 - testLogDirLockWhenBrokerOnlyWithSeparateMetadataDir
 - testLogDirLockWhenControllerOnly
 - testNodeIdPresent
+- testRaftManagerRegistersSslChannelBuilderForReconfiguration
 kafka.server.AbstractFetcherManagerTest:
 - testAddAndRemovePartition
 - testDeadThreadCountMetric
@@ -1985,6 +1984,8 @@ kafka.server.OffsetFetchRequestTest:
 kafka.server.OffsetsForLeaderEpochRequestTest:
 - testCurrentEpochValidation
 - testOffsetsForLeaderEpochErrorCodes
+kafka.server.RaftManagerSslReconfigIntegrationTest:
+- testDynamicControllerKeystoreReachesRunningRaftChannel
 kafka.server.RemoteLeaderEndPointTest:
 - testBrokerEpochSupplier
 - testFetchEarliestLocalOffset
@@ -2271,51 +2272,6 @@ kafka.server.TxnOffsetCommitRequestTest:
 kafka.server.WriteTxnMarkersRequestTest:
 - testDelayedWriteTxnMarkersShouldNotCommitTxnOffsetWithNewConsumerGroupProtocol
 - testDelayedWriteTxnMarkersShouldNotCommitTxnOffsetWithOldConsumerGroupProtocol
-kafka.server.epoch.LeaderEpochFileCacheTest:
-- shouldAddEpochAndMessageOffsetToCache
-- shouldClearAllEntries
-- shouldClearEarliestOnEmptyCache
-- shouldClearLatestOnEmptyCache
-- shouldDropEntriesBetweenEpochBoundaryWhenRemovingNewest
-- shouldDropEntriesOnEpochBoundaryWhenRemovingLatestEntries
-- shouldEnforceMonotonicallyIncreasingEpochs
-- shouldEnforceMonotonicallyIncreasingStartOffsets
-- shouldEnforceOffsetsIncreaseMonotonically
-- shouldFetchEndOffsetOfEmptyCache
-- shouldFetchEpochForGivenOffset
-- shouldFetchLatestEpochOfEmptyCache
-- shouldGetFirstOffsetOfSubsequentEpochWhenOffsetRequestedForPreviousEpoch
-- shouldIncreaseAndTrackEpochsAsFollowerReceivesManyMessages
-- shouldIncreaseAndTrackEpochsAsLeadersChangeManyTimes
-- shouldNotClearAnythingIfOffsetToEarly
-- shouldNotClearAnythingIfOffsetToFirstOffset
-- shouldNotOverwriteLogEndOffsetForALeaderEpochOnceItHasBeenAssigned
-- shouldNotOverwriteOffsetForALeaderEpochOnceItHasBeenAssigned
-- shouldNotResetEpochHistoryHeadIfUndefinedPassed
-- shouldNotResetEpochHistoryTailIfUndefinedPassed
-- shouldNotUpdateEpochAndStartOffsetIfItDidNotChange
-- shouldPersistEpochsBetweenInstances
-- shouldPreserveResetOffsetOnClearEarliestIfOneExists
-- shouldRetainLatestEpochOnClearAllEarliest
-- shouldRetainLatestEpochOnClearAllEarliestAndUpdateItsOffset
-- shouldReturnFirstEpochIfRequestedEpochLessThanFirstEpoch
-- shouldReturnInvalidOffsetIfEpochIsRequestedWhichIsNotCurrentlyTracked
-- shouldReturnLogEndOffsetIfLatestEpochRequested
-- shouldReturnNextAvailableEpochIfThereIsNoExactEpochForTheOneRequested
-- shouldReturnUndefinedOffsetIfUndefinedEpochRequested
-- shouldReturnUnsupportedIfNoEpochRecorded
-- shouldReturnUnsupportedIfNoEpochRecordedAndUndefinedEpochRequested
-- shouldSupportEpochsThatDoNotStartFromZero
-- shouldTruncateIfMatchingEpochButEarlierStartingOffset
-- shouldUpdateOffsetBetweenEpochBoundariesOnClearEarliest
-- shouldUpdateOffsetBetweenEpochBoundariesOnClearEarliest2
-- shouldUpdateSavedOffsetWhenOffsetToClearToIsBetweenEpochs
-- shouldWriteCheckpointOnTruncation
-- testFindNextEpoch
-- testFindPreviousEntry
-- testFindPreviousEpoch
-- testGetEpochEntry
-- testPreviousEpoch
 kafka.server.epoch.LeaderEpochIntegrationTest:
 - shouldAddCurrentLeaderEpochToMessagesAsTheyAreWrittenToLeader
 - shouldIncreaseLeaderEpochBetweenLeaderRestarts

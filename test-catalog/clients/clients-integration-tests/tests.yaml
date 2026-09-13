@@ -62,6 +62,12 @@ org.apache.kafka.clients.admin.AlterConfigsIntegrationTest:
 - testAlterConfigsRespectsConfigProviderAllowlist
 - testAlterConfigsWithConfigProviders
 - testAlterConfigsWithConfigProvidersAndValidatorRejection
+- testAlterConfigsWithConfigProvidersForBooleanConfig
+- testAlterConfigsWithConfigProvidersForClusterWideIntConfig
+- testAlterConfigsWithConfigProvidersForDoubleConfig
+- testAlterConfigsWithConfigProvidersForListConfig
+- testAlterConfigsWithConfigProvidersForLongConfig
+- testAlterConfigsWithConfigProvidersForPerBrokerIntConfig
 - testAlterConfigsWithConfigProvidersWithoutAcls
 org.apache.kafka.clients.admin.AutoTopicCreationTest:
 - testAutoCreateTopicWithDefaultConfig
@@ -89,6 +95,8 @@ org.apache.kafka.clients.admin.DescribeAuthorizedOperationsTest:
 - testClusterAuthorizedOperations
 - testConsumerGroupAuthorizedOperations
 - testTopicAuthorizedOperations
+org.apache.kafka.clients.admin.DescribeConfigsTest:
+- testDescribeConfigsNonexistent
 org.apache.kafka.clients.admin.DescribeFeaturesTest:
 - testApiVersions
 - testSendRequestToWrongNodeType
@@ -518,7 +526,10 @@ org.apache.kafka.clients.consumer.ShareConsumerTest:
 org.apache.kafka.clients.producer.ProducerCompressionTest:
 - testCompression
 org.apache.kafka.clients.producer.ProducerFailureHandlingTest:
-- testCannotSendToInternalTopic
+- testCannotSendToInternalTopicWhenAutoCreateFalseAndTopicExists
+- testCannotSendToInternalTopicWhenAutoCreateFalseAndTopicNotExists
+- testCannotSendToInternalTopicWhenAutoCreateTrueAndTopicExists
+- testCannotSendToInternalTopicWhenAutoCreateTrueAndTopicNotExists
 - testInvalidPartition
 - testNonExistentTopic
 - testNotEnoughReplicasAfterBrokerShutdown

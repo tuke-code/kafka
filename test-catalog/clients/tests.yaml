@@ -182,6 +182,9 @@ org.apache.kafka.clients.admin.EndpointTypeTest:
 - testRoundTripController
 - testUnknown
 org.apache.kafka.clients.admin.GroupListingTest:
+- testNullGroupStateConstructor
+- testNullProtocolConstructor
+- testNullTypeConstructor
 - testSimpleConsumerGroup
 org.apache.kafka.clients.admin.KafkaAdminClientConfigTest:
 - testAlterClientQuotas
@@ -1413,8 +1416,12 @@ org.apache.kafka.clients.consumer.internals.ConsumerHeartbeatRequestManagerTest:
 - testHeartbeatResponseOnErrorHandling
 - testHeartbeatState
 - testLogsHeartbeatIntervalReceivedFromCoordinatorOnlyWhenChanged
+- testMaximumTimeToWaitDoesNotSpinDuringRealBootstrapDnsResolution
 - testMaximumTimeToWaitWhenCoordinatorUnavailableDoesNotSpin
+- testMaximumTimeToWaitWhenFatalReturnsMaxValue
+- testMaximumTimeToWaitWhenFencedWaitsRetryBackoff
 - testMaximumTimeToWaitWhenHeartbeatShouldBeSkipped
+- testMaximumTimeToWaitWhenJoiningAndCoordinatorUnknownDoesNotSpin
 - testNetworkTimeout
 - testNoCoordinator
 - testPollOnCloseGeneratesRequestIfNeeded
@@ -2499,7 +2506,9 @@ org.apache.kafka.clients.consumer.internals.ShareHeartbeatRequestManagerTest:
 - testHeartbeatResponseOnErrorHandling
 - testHeartbeatState
 - testLogsHeartbeatIntervalReceivedFromCoordinatorOnlyWhenChanged
+- testMaximumTimeToWaitWhenFatalReturnsMaxValue
 - testMaximumTimeToWaitWhenHeartbeatShouldBeSkippedDoesNotSpin
+- testMaximumTimeToWaitWhenJoiningAndCoordinatorUnknownDoesNotSpin
 - testNetworkTimeout
 - testNoCoordinator
 - testPollTimerExpiration
@@ -3385,6 +3394,7 @@ org.apache.kafka.clients.producer.internals.SenderTest:
 - testEpochBumpOnOutOfOrderSequenceForNextBatch
 - testEpochBumpOnOutOfOrderSequenceForNextBatchWhenBatchInFlightFails
 - testEpochBumpOnOutOfOrderSequenceForNextBatchWhenThereIsNoBatchInFlight
+- testEpochBumpWhenOutOfOrderBatchesRetriedAndFirstBatchExpires
 - testExpiredBatchDoesNotRetry
 - testExpiredBatchDoesNotSplitOnMessageTooLargeError
 - testExpiredBatchesInMultiplePartitions
@@ -3974,6 +3984,7 @@ org.apache.kafka.common.message.ApiMessageTypeTest:
 - testFromApiKey
 - testHeaderVersion
 - testHeaderVersionWithNoValidVersion
+- testHeaderVersionsMatchSchemaFlexibility
 - testInvalidFromApiKey
 - testUniqueness
 org.apache.kafka.common.message.MessageTest:
@@ -5541,6 +5552,11 @@ org.apache.kafka.common.security.ssl.Tls13SslFactoryTest:
 - testSslFactoryWithoutProviderClassConfiguration
 - testUntrustedKeyStoreValidationFails
 - testUsedConfigs
+org.apache.kafka.common.security.token.delegation.TokenInformationTest:
+- testEqualInstancesCollapseInHashSet
+- testEqualsAndHashCode
+- testHashCodeIgnoresExpiryTimestampLikeEquals
+- testHashCodeIsStableAcrossRenewal
 org.apache.kafka.common.serialization.ListDeserializerTest:
 - shouldDeserializeListEndingInEmptyEntry
 - shouldPassHeadersToUnderlyingDeserializer

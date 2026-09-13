@@ -288,6 +288,50 @@ org.apache.kafka.storage.internals.checkpoint.PartitionMetadataFileTest:
 - testRead
 - testSetRecordWithDifferentTopicId
 - testSetRecordWithSameTopicId
+org.apache.kafka.storage.internals.epoch.LeaderEpochFileCacheTest:
+- shouldAddEpochAndMessageOffsetToCache
+- shouldClearAllEntries
+- shouldClearEarliestOnEmptyCache
+- shouldClearLatestOnEmptyCache
+- shouldDropEntriesBetweenEpochBoundaryWhenRemovingNewest
+- shouldDropEntriesOnEpochBoundaryWhenRemovingLatestEntries
+- shouldEnforceMonotonicallyIncreasingEpochs
+- shouldEnforceMonotonicallyIncreasingStartOffsets
+- shouldEnforceOffsetsIncreaseMonotonically
+- shouldFetchEndOffsetOfEmptyCache
+- shouldFetchEpochForGivenOffset
+- shouldFetchLatestEpochOfEmptyCache
+- shouldGetFirstOffsetOfSubsequentEpochWhenOffsetRequestedForPreviousEpoch
+- shouldIncreaseAndTrackEpochsAsFollowerReceivesManyMessages
+- shouldIncreaseAndTrackEpochsAsLeadersChangeManyTimes
+- shouldNotClearAnythingIfOffsetIsFirstOffset
+- shouldNotClearAnythingIfOffsetTooEarly
+- shouldNotOverwriteOffsetForALeaderEpochOnceItHasBeenAssigned
+- shouldNotResetEpochHistoryHeadIfUndefinedPassed
+- shouldNotResetEpochHistoryTailIfUndefinedPassed
+- shouldPersistEpochsBetweenInstances
+- shouldPreserveResetOffsetOnClearEarliestIfOneExists
+- shouldRetainLatestEpochOnClearAllEarliest
+- shouldRetainLatestEpochOnClearAllEarliestAndUpdateItsOffset
+- shouldReturnEpochEntriesInRangeWithoutMutatingCache
+- shouldReturnFirstEpochIfRequestedEpochLessThanFirstEpoch
+- shouldReturnInvalidOffsetIfEpochIsRequestedWhichIsNotCurrentlyTracked
+- shouldReturnLogEndOffsetIfLatestEpochRequested
+- shouldReturnNextAvailableEpochIfThereIsNoExactEpochForTheOneRequested
+- shouldReturnNoEpochEntriesForEmptyRange
+- shouldReturnUndefinedOffsetIfUndefinedEpochRequested
+- shouldReturnUnsupportedIfNoEpochRecorded
+- shouldReturnUnsupportedIfNoEpochRecordedAndUndefinedEpochRequested
+- shouldSupportEpochsThatDoNotStartFromZero
+- shouldTruncateIfMatchingEpochButEarlierStartingOffset
+- shouldUpdateOffsetBetweenEpochBoundariesOnClearEarliest
+- shouldUpdateOffsetBetweenFirstTwoEpochBoundariesOnClearEarliest
+- shouldWriteCheckpointOnTruncation
+- testFindNextEpoch
+- testFindPreviousEntry
+- testFindPreviousEpoch
+- testGetEpochEntry
+- testPreviousEpoch
 org.apache.kafka.storage.internals.log.AbstractIndexTest:
 - testCloseInvokeFlush
 - testResizeInvokeUnmap
@@ -624,14 +668,17 @@ org.apache.kafka.storage.internals.log.OffsetIndexTest:
 - truncate
 org.apache.kafka.storage.internals.log.OffsetMapTest:
 - testBasicValidation
+- testBytesPerEntryMatchesDigestLength
 - testClear
 - testGetWhenFull
 - testLatestOffset
+- testUnknownAlgorithmThrows
 - testUpdateLatestOffset
 - testUtilization
 org.apache.kafka.storage.internals.log.ProducerStateManagerTest:
 - testAcceptAppendWithSequenceGapsOnReplica
 - testAcceptAppendWithoutProducerStateOnReplica
+- testAllowNonZeroFirstSequenceWithEmptyStateOnNonEmptyLog
 - testAllowNonZeroSequenceForTransactionsV1WithEmptyState
 - testAppendEmptyControlBatch
 - testAppendTxnMarkerWithNoProducerState
@@ -660,6 +707,7 @@ org.apache.kafka.storage.internals.log.ProducerStateManagerTest:
 - testOutOfSequenceAfterControlRecordEpochBump
 - testPidExpirationTimeout
 - testPrepareUpdateDoesNotMutate
+- testPrepareUpdateRequiresZeroSequenceOnlyBeforeFirstAppend
 - testProducerSequenceInvalidWrapAround
 - testProducerSequenceWithWrapAroundBatchRecord
 - testProducerSequenceWrapAround
@@ -669,6 +717,7 @@ org.apache.kafka.storage.internals.log.ProducerStateManagerTest:
 - testRecoverFromSnapshotEmptyTransaction
 - testRecoverFromSnapshotFinishedTransaction
 - testRecoverFromSnapshotUnfinishedTransaction
+- testRejectNonZeroFirstSequenceWithEmptyStateOnEmptyLog
 - testRejectNonZeroSequenceForDirectEpochBump
 - testRejectNonZeroSequenceForTransactionsV2WithEmptyState
 - testReloadSnapshots
@@ -857,6 +906,7 @@ org.apache.kafka.storage.internals.log.UnifiedLogTest:
 - testNextTransactionVerificationGuardNotCleared
 - testNoOpWhenRemoteLogStorageIsDisabled
 - testNonSequentialAppend
+- testNonZeroFirstSequenceAcceptedAfterProducerStateExpiration
 - testNonZeroSequenceOnFirstAppendNonZeroEpoch
 - testOffsetFromProducerSnapshotFile
 - testOffsetSnapshot
@@ -879,6 +929,7 @@ org.apache.kafka.storage.internals.log.UnifiedLogTest:
 - testRebuildProducerStateWithEmptyCompactedBatch
 - testRebuildTransactionalState
 - testRecoveryPointNotIncrementedOnProducerStateSnapshotFlushFailure
+- testRejectOutOfOrderFirstRequestOnNewlyCreatedLog
 - testRemoteLogStorageIsDisabledOnInternalAndRemoteLogMetadataTopic
 - testRenamingDirWithoutReinitialization
 - testReplicationWithTVUnknownAllowed
