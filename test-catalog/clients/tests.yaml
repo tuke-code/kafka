@@ -2378,6 +2378,7 @@ org.apache.kafka.clients.consumer.internals.ShareConsumeRequestManagerTest:
 - testCorruptMessageError
 - testDoesNotCloseSessionWhileAcknowledgementsPending
 - testDoesNotCloseSessionWhileRecordsBuffered
+- testEmptyResponseThenDataResponseBeforeCollectClearsInflightRecords
 - testFatalErrorsAcknowledgementResponse
 - testFetchDisconnected
 - testFetchError
@@ -2412,6 +2413,7 @@ org.apache.kafka.clients.consumer.internals.ShareConsumeRequestManagerTest:
 - testRetryAcknowledgementsMultipleCommitAsync
 - testRetryAcknowledgementsMultipleCommitSync
 - testRetryAcknowledgementsWithLeaderChange
+- testSecondFetchBeforeCollectClearsInflightRecords
 - testServerDisconnectedOnShareAcknowledge
 - testSessionHandlerRemovedAndPiggybackAcksFailedWhenNodeDisappears
 - testShareAcknowledgeInvalidResponse
@@ -2480,13 +2482,17 @@ org.apache.kafka.clients.consumer.internals.ShareFetchBufferTest:
 - testRetainsEvictedFetchWithPendingRenewAcknowledgements
 - testWakeup
 org.apache.kafka.clients.consumer.internals.ShareFetchCollectorTest:
+- testEmptyFetchFollowedByDataFetchForSamePartitionDoesNotLeak
 - testErrorInInitialize
+- testErrorInInitializeDoesNotLoseRecordsFromEarlierPartitions
 - testFetchNormal
 - testFetchWithCorruptMessage
 - testFetchWithOtherErrors
 - testFetchWithTopicAuthorizationFailed
 - testFetchWithUnknownLeaderEpoch
 - testFetchWithUnknownServerError
+- testRepeatedFetchesForSamePartitionDoNoAccumulateRetainedFetches
+- testSecondFetchForSamePartitionMergesWithoutLeaking
 - testWithRenew
 org.apache.kafka.clients.consumer.internals.ShareFetchMetricsManagerTest:
 - testAcknowledgements
@@ -4027,6 +4033,8 @@ org.apache.kafka.common.message.MessageTest:
 - testProduceResponseVersions
 - testSimpleMessage
 - testSyncGroupDefaultGroupInstanceId
+- testTaggedFieldCountRejectedWhenExceedingHardCap
+- testTaggedFieldCountRejectedWhenLargerThanRemainingBytes
 - testThrottleTimeIgnorableInDescribeGroupsResponse
 - testTxnOffsetCommitRequestVersions
 - testTxnOffsetCommitResponseVersions
@@ -4051,6 +4059,10 @@ org.apache.kafka.common.message.RecordsSerdeTest:
 org.apache.kafka.common.message.SimpleArraysMessageTest:
 - testArrayBoundsChecking
 - testArrayBoundsCheckingOtherArray
+- testArrayLengthAboveMaxIsRejected
+- testDeclaredLengthAboveInitialCapacityStillParses
+- testKeyedArrayLengthAboveMaxIsRejected
+- testKeyedDeclaredLengthAboveInitialCapacityStillParses
 org.apache.kafka.common.message.SimpleExampleMessageTest:
 - shouldDefaultField
 - shouldImplementEqualsAndHashCode
@@ -4845,10 +4857,14 @@ org.apache.kafka.common.requests.RequestContextTest:
 - testInvalidRequestForArrayList
 - testInvalidRequestForByteArray
 - testInvalidRequestForImplicitHashCollection
+- testInvalidRequestForImplicitHashCollectionWithMaxPreAllocation
+- testKeyedCollectionAboveInitialCapacityStillParses
+- testProduceRequestV3WithHugeDeclaredTopicCountIsRejected
 - testSerdeUnsupportedApiVersionRequest
 org.apache.kafka.common.requests.RequestHeaderTest:
 - parseHeaderFromBufferWithNonZeroPosition
 - parseHeaderWithNullClientId
+- testHugeDeclaredTaggedFieldCountIsRejected
 - testRequestHeaderV1
 - testRequestHeaderV2
 - verifySizeMethodsReturnSameValue
