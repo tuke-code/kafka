@@ -1234,15 +1234,6 @@ org.apache.kafka.coordinator.group.modern.TopicIdsTest:
 - testTopicNamesCannotBeNull
 - testTopicResolverCannotBeNull
 - testTopicsImageCannotBeNull
-org.apache.kafka.coordinator.group.modern.UnionSetTest:
-- testContains
-- testEquals
-- testIsEmpty
-- testSetsCannotBeNull
-- testSize
-- testToArray
-- testToArrayWithArrayParameter
-- testUnion
 org.apache.kafka.coordinator.group.modern.consumer.ConsumerGroupMemberTest:
 - testAsConsumerGroupDescribeMember
 - testAsConsumerGroupDescribeMemberWithSameTopicPendingRevocation
@@ -1386,6 +1377,7 @@ org.apache.kafka.coordinator.group.streams.AssignmentRefinerTest:
 - shouldBorrowASiblingStandbyWhereItSitsWhenTheBudgetCannotMoveIt
 - shouldBorrowAStandbyOnTheTargetOwnerItselfInsteadOfSpendingASlot
 - shouldBreakAFullTieOnTheCanonicalTaskOrder
+- shouldBreakATieAmongCaughtUpCopiesOnTheMemberId
 - shouldCountStatefulTasksOfEveryRoleTowardsProcessLoad
 - shouldCountWarmupsFundedThisPassInTheSourceProcessLoad
 - shouldDecideEachDivergingTaskExactlyOnce
@@ -1404,8 +1396,11 @@ org.apache.kafka.coordinator.group.streams.AssignmentRefinerTest:
 - shouldEvictWarmupsInReverseFundingOrderWhenTheBudgetShrinks
 - shouldFreeTheSlotOfAWarmupWhoseTaskIsGrantedInTheSameStep
 - shouldFundAFreshPlantAheadOfASiblingMoveEvenOnAHeavierProcess
+- shouldFundAPromotedMigrationsPlantLikeAnyOther
 - shouldFundTheMigrationRelievingTheBusierSourceWhenDestinationsTie
 - shouldFundTheMigrationWithTheLeastLoadedDestinationFirst
+- shouldGrantATaskNobodyHoldsWhenItsTargetProcessReportsStateOnDisk
+- shouldGrantATaskNobodyHoldsWhenNoCopyOfItIsCaughtUp
 - shouldGrantATaskNobodyRunsEvenToAColdMember
 - shouldGrantATaskWhoseHolderIsStillRestoringItEvenToAColdMember
 - shouldGrantATaskWhoseHolderIsStillRestoringItRatherThanStageIt
@@ -1417,7 +1412,9 @@ org.apache.kafka.coordinator.group.streams.AssignmentRefinerTest:
 - shouldHoldATaskWithAHolderThatIsStillRestoringItWhenItsTargetOwnerIsGone
 - shouldIndexAnActiveHolderThatIsStillRestoringAsNotProcessing
 - shouldIndexAnActiveHolderWhoseRestoreHasNotStartedAsNotProcessing
+- shouldIndexAnActiveHolderWithinTheAcceptableRecoveryLagAsCaughtUp
 - shouldIndexStandbyAndWarmupHoldersWithWhetherTheyAreCaughtUp
+- shouldIndexStateOnDiskOnlyForTasksTheProcessHoldsNoCopyOf
 - shouldIndexTheMemberProcessingATaskAsItsActiveHolder
 - shouldKeepABorrowedStandbyWhereHistoryLeftIt
 - shouldKeepFundingAWarmupThatIsAlreadyRestoring
@@ -1437,6 +1434,7 @@ org.apache.kafka.coordinator.group.streams.AssignmentRefinerTest:
 - shouldNotFundAMigrationWhoseTargetMemberHasLeftTheGroup
 - shouldNotFundAWarmupWhoseTaskWasReTargetedToAnotherProcess
 - shouldNotIndexAnActiveHolderForATaskThatIsPendingRevocation
+- shouldNotIndexStateOnDiskForATaskASiblingMemberHolds
 - shouldNotIndexStatelessTasks
 - shouldNotPreserveActiveTaskCountWhenASubtopologyWasDroppedEntirely
 - shouldNotPreserveActiveTaskCountWhenATaskWasDropped
@@ -1458,6 +1456,10 @@ org.apache.kafka.coordinator.group.streams.AssignmentRefinerTest:
 - shouldPreserveActiveTaskCountWhenTheTargetAssignmentItselfDuplicatesATask
 - shouldPreserveTheActiveTaskCountThroughEveryDerivation
 - shouldPreserveTheReplicaCountOfABorrowedMigration
+- shouldPromoteACaughtUpCopyHolderOfATaskNobodyHoldsWhenItsTargetOwnerIsGone
+- shouldPromoteACopyHolderTheTargetAssignmentDoesNotNameAsAStandbyHolder
+- shouldPromoteTheCaughtUpCopyHolderOfATaskNobodyHolds
+- shouldPromoteTheCaughtUpCopyOnTheLeastLoadedProcess
 - shouldRelabelAWarmupOntoTheNewTargetOwnerWithinTheSameProcess
 - shouldReportAnInFlightWarmupOnTheTargetProcess
 - shouldReturnDecisionsInCanonicalTaskOrder
@@ -1466,9 +1468,12 @@ org.apache.kafka.coordinator.group.streams.AssignmentRefinerTest:
 - shouldSpreadConcurrentPlantsAcrossProcessesRatherThanStackingThem
 - shouldStageAMigrationToAMemberThatHoldsNoState
 - shouldStageAMigrationWhenTheHolderHasNotReportedAnyOffsetsYet
+- shouldStageFromACaughtUpCopyWhenTheActiveHolderIsTooFarBehindToRunTheTask
+- shouldStageFromAnActiveHolderWithinTheAcceptableRecoveryLagRatherThanPromoteACopy
 - shouldStageWhenTheReplicaOnTheTargetProcessIsNotCaughtUpYet
 - shouldWithholdAStandbyOnAProcessThatStillRunsTheTaskAsActive
 - shouldWithholdAStandbyOnTheProcessAMigrationIsStagedOn
+- shouldWithholdOnlyOnePlacementWhenAPromotedMigrationBorrows
 - shouldWithholdOnlyOneRelocatedStandbyOfABorrowedMigration
 - shouldWithholdTheRelocatedStandbyOfABorrowedMigration
 org.apache.kafka.coordinator.group.streams.CurrentAssignmentBuilderTest:
@@ -1687,6 +1692,7 @@ org.apache.kafka.coordinator.group.streams.TasksTupleTest:
 - testSameTasks
 - testTasksCannotBeNull
 org.apache.kafka.coordinator.group.streams.TasksTupleWithEpochsTest:
+- testActiveTasks
 - testFromCurrentAssignmentRecord
 - testFromCurrentAssignmentRecordWithMismatchedEpochs
 - testFromCurrentAssignmentRecordWithoutEpochs
@@ -1864,6 +1870,15 @@ org.apache.kafka.coordinator.group.util.OverlayMapTest:
 - testRemove
 - testRemoveExistingKey
 - testSize
+org.apache.kafka.coordinator.group.util.UnionSetTest:
+- testContains
+- testEquals
+- testIsEmpty
+- testSetsCannotBeNull
+- testSize
+- testToArray
+- testToArrayWithArrayParameter
+- testUnion
 org.apache.kafka.coordinator.group.util.UpdatedMembersAndTargetAssignmentViewTest:
 - testAddMember
 - testAddStaticMember
